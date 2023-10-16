@@ -3,4 +3,21 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
+    <include relativeToChangelogFile="true"
+             file="scripts/users.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/categories.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/wallets.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/sales_oreders.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/transactions.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/collectibles.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/collectible_prices.sql"/>
+    <include relativeToChangelogFile="true"
+             file="scripts/stock_portfolio.sql"/>
+
 </databaseChangeLog>
