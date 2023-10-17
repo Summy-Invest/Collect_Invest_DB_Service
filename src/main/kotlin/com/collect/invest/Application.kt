@@ -16,10 +16,10 @@ fun main() {
     val dbPassword = System.getProperty("db.password")
 
 
-//    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-//        .start(wait = true)
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
+        .start(wait = true)
 }
 
-//fun Application.module() {
-//    configureRouting()
-//}
+fun Application.module() {
+    configureRouting()
+}
