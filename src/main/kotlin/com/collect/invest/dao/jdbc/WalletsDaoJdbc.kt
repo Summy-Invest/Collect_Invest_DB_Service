@@ -1,12 +1,11 @@
 package com.collect.invest.dao.jdbc
 
 import com.collect.invest.dao.WalletsDao
-import com.collect.invest.dao.entity.UsersEntity
 import com.collect.invest.dao.entity.WalletsEntity
-import io.ktor.network.sockets.*
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
+
 class WalletsDaoJdbc(
     private val url: String,
     private val username: String,
@@ -31,17 +30,28 @@ class WalletsDaoJdbc(
         }
     }
 
-    override fun getById(id: Long): WalletsEntity? {
+    override fun getById(userId: Long): WalletsEntity? {
         getConnection().use { connection ->
-            val sql = "SELECT * FROM wallets WHERE wallet_id = ?"
+            val sql = "SELECT * FROM wallets WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
-                statement.setLong(1, id)
+                statement.setLong(1, userId)
                 val resultSet = statement.executeQuery()
                 return if (resultSet.next()) {
                     extractWalletFromResultSet(resultSet)
                 } else {
                     null
                 }
+            }
+        }
+    }
+
+    override fun updateStatus(userId: Long, status: String) {
+        getConnection().use { connection ->
+            val sql = "UPDATE wallets SET status = ? WHERE user_id = ?"
+            connection.prepareStatement(sql).use { statement ->
+                statement.setString(1, status)
+                statement.setLong(2, userId)
+                statement.executeQuery()
             }
         }
     }
@@ -54,7 +64,7 @@ class WalletsDaoJdbc(
         return WalletsEntity(id, user_id, balance, status)
     }
 
-    override fun increaseBalance(amount: Int, userId: Long): String {
+    override fun topupBalance(amount: Int, userId: Long): String {
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money + ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
@@ -70,7 +80,7 @@ class WalletsDaoJdbc(
         }
     }
 
-    override fun decreaseBalance(amount: Int, userId: Long): String {
+    override fun withdrawBalance(amount: Int, userId: Long): String {
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money - ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
@@ -85,4 +95,6 @@ class WalletsDaoJdbc(
             }
         }
     }
+
+
 }
