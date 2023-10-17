@@ -20,4 +20,12 @@ class UserService(
         // TODO
         usersDao.saveUser(user)
     }
+
+
+    suspend fun getById(id: Long): UsersEntity? {
+        // TODO
+        return usersDao.getById(id)
+    }
+
+
 }
