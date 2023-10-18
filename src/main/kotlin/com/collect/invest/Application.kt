@@ -7,13 +7,11 @@ import com.collect.invest.plugins.*
 
 fun main() {
 
+
+    //TODO засунуть в property файл
     System.setProperty("db.url", "jdbc:postgresql://postgresql:5432/postgres")
     System.setProperty("db.username", "postgres")
     System.setProperty("db.password", "password")
-
-    val dbUrl = System.getProperty("db.url")
-    val dbUsername = System.getProperty("db.username")
-    val dbPassword = System.getProperty("db.password")
 
 
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
