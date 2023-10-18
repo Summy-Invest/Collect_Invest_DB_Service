@@ -19,12 +19,12 @@ class WalletsDaoJdbc(
         return DriverManager.getConnection(url, username, password)
     }
 
-    override fun createWallet(entity: WalletsEntity) {
+//TODO сделать чтоб эта хуйня только id принимала
+    override fun createWallet(id: Long) {
         getConnection().use {connection ->
-            val sql = "INSERT INTO wallets (user_id, status) VALUES(?, ?)"
+            val sql = "INSERT INTO wallets (user_id, status) VALUES(?)"
             connection.prepareStatement(sql).use { statement ->
-                statement.setLong(1, entity.userId)
-                statement.setString(2, entity.status)
+                statement.setLong(1, id)
                 statement.executeUpdate()
             }
         }
@@ -58,13 +58,13 @@ class WalletsDaoJdbc(
 
     private fun extractWalletFromResultSet(resultSet: ResultSet): WalletsEntity {
         val id = resultSet.getLong("wallet_id")
-        val user_id = resultSet.getLong("user_id")
+        val userId = resultSet.getLong("user_id")
         val balance = resultSet.getInt("money")
         val status = resultSet.getString("status")
-        return WalletsEntity(id, user_id, balance, status)
+        return WalletsEntity(id, userId, balance, status)
     }
 
-    override fun topupBalance(amount: Int, userId: Long): String {
+    override fun topupBalance(userId: Long, amount: Int): String {
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money + ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
@@ -80,7 +80,7 @@ class WalletsDaoJdbc(
         }
     }
 
-    override fun withdrawBalance(amount: Int, userId: Long): String {
+    override fun withdrawBalance(userId: Long, amount: Int): String {
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money - ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->

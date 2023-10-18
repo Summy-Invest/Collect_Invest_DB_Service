@@ -23,9 +23,9 @@ fun Route.userRotes(usersDao: UsersDao){
     //Обработка запроса на получение юзера по его id
     get("userService/getUserById/{id}"){
     try {
-        val idParam = call.parameters["id"]?.toLongOrNull()
-        if (idParam != null) {
-            val user: UsersEntity? = usersDao.getById(idParam)
+        val id = call.parameters["id"]?.toLongOrNull()
+        if (id != null) {
+            val user: UsersEntity? = usersDao.getById(id)
             if(user != null) {
                 call.respond(user)
             }else{

@@ -23,14 +23,25 @@ class UsersDaoJdbc(
 
     override fun saveUser(entity: UsersEntity) {
         getConnection().use { connection ->
-            val sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)"
+            val sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING user_id;"
             connection.prepareStatement(sql).use { statement ->
                 statement.setString(1, entity.name)
                 statement.setString(2, entity.email)
                 statement.setString(3, entity.password)
                 statement.executeUpdate()
+
+                //создание кошелька для юзера
+                val resultSet = statement.executeQuery()
+                if (resultSet.next()) {
+                    val walletsDao = WalletsDaoJdbc(url, username, password)
+                    val userId = resultSet.getLong("id")
+                    walletsDao.createWallet(userId)
+                } else {
+                    throw RuntimeException("Failed to insert user")
+                }
             }
         }
+
     }
 
     override fun getById(id: Long): UsersEntity? {
