@@ -1,44 +1,42 @@
 package com.collect.invest.plugins.routes
 
+import com.collect.invest.dao.UsersDao
 import com.collect.invest.dao.entity.UsersEntity
-import com.collect.invest.service.UserService
-import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-fun Route.userRotes(userService: UserService){
+fun Route.userRotes(usersDao: UsersDao){
 
     //Обработка запроса на добавление юзера
     post("userService/saveUser") {
-        val user = call.receive<UsersEntity>()
-        if (userService.validateUser(user)) {
-            val processedUser = userService.processUserData(user)
-            userService.saveUser(processedUser)
-            call.respondText("Пользователь сохранен: ${user.name}")
-        } else {
-            call.respond(HttpStatusCode.BadRequest, "Неверные данные пользователя")
+        try{
+            val user = call.receive<UsersEntity>()
+            usersDao.saveUser(user)
+            call.respond("User added")
+        }catch(e: Throwable){
+            call.respond("Error while creating user")
         }
     }
 
     //Обработка запроса на получение юзера по его id
     get("userService/getUserById/{id}"){
-        val idParam = call.parameters["id"]
+    try {
+        val idParam = call.parameters["id"]?.toLongOrNull()
         if (idParam != null) {
-            val id = idParam.toLongOrNull()
-            if (id != null) {
-                val user: UsersEntity? = userService.getById(id)
-                if(user != null){
-                    call.respond(user)
-                }else{
-                    call.respond(HttpStatusCode.BadRequest, "Invalid ID")
-                }
-            } else {
-                call.respond(HttpStatusCode.BadRequest, "Invalid ID format")
+            val user: UsersEntity? = usersDao.getById(idParam)
+            if(user != null) {
+                call.respond(user)
+            }else{
+                call.respond("Error while getting user")
             }
-        } else {
-            call.respond(HttpStatusCode.BadRequest, "ID is missing")
+        }else{
+            call.respond("Error while getting user")
         }
+    }catch (e: Throwable){
+        call.respond("Error while getting user")
+    }
+
     }
 }
