@@ -9,7 +9,7 @@ fun main() {
 
 
     //TODO засунуть в property файл
-    System.setProperty("db.url", "jdbc:postgresql://postgresql:5432/postgres")
+    System.setProperty("db.url", "jdbc:postgresql://localhost:5432/postgres")
     System.setProperty("db.username", "postgres")
     System.setProperty("db.password", "password")
 
