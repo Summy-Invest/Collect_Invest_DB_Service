@@ -28,21 +28,20 @@ class UsersDaoJdbc(
                 statement.setString(1, entity.name)
                 statement.setString(2, entity.email)
                 statement.setString(3, entity.password)
-                statement.executeUpdate()
 
-                //создание кошелька для юзера
+                // Используем executeQuery для получения ResultSet, поскольку ожидаем возвращаемые данные
                 val resultSet = statement.executeQuery()
                 if (resultSet.next()) {
                     val walletsDao = WalletsDaoJdbc(url, username, password)
-                    val userId = resultSet.getLong("id")
+                    val userId = resultSet.getLong("user_id") // Убедитесь, что имя колонки соответствует тому, что возвращается в SQL
                     walletsDao.createWallet(userId)
                 } else {
                     throw RuntimeException("Failed to insert user")
                 }
             }
         }
-
     }
+
 
     override fun getById(id: Long): UsersEntity? {
         getConnection().use { connection ->

@@ -19,10 +19,10 @@ class WalletsDaoJdbc(
         return DriverManager.getConnection(url, username, password)
     }
 
-//TODO сделать чтоб эта хуйня только id принимала
+
     override fun createWallet(id: Long) {
         getConnection().use {connection ->
-            val sql = "INSERT INTO wallets (user_id, status) VALUES(?)"
+            val sql = "INSERT INTO wallets (user_id) VALUES(?)"
             connection.prepareStatement(sql).use { statement ->
                 statement.setLong(1, id)
                 statement.executeUpdate()

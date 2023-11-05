@@ -1,0 +1,184 @@
+openapi: "3.0.3"
+info:
+  title: "Collect_Invest_DB_service API"
+  description: "Collect_Invest_DB_service API"
+  version: "1.0.0"
+servers:
+- url: "https://localhost:8080"
+paths:
+  /financialService/wallet/financialService/getWallet/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while getting wallet"
+                Example#2:
+                  value: "Error while getting wallet"
+                Example#3:
+                  value: "Error while getting wallet"
+  /financialService/wallet/financialService/topupBalance/{id}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: "integer"
+              format: "int32"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while changing balance"
+                Example#2:
+                  value: "Error while changing balance"
+  /financialService/wallet/financialService/updateStatus/{id}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while changing wallet status"
+                Example#2:
+                  value: "Error while changing wallet status"
+  /financialService/wallet/financialService/withdrawBalance/{id}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              type: "integer"
+              format: "int32"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while changing balance"
+                Example#2:
+                  value: "Error while changing balance"
+  /userService/getUserById/{id}:
+    get:
+      description: "Обработка запроса на получение юзера по его id"
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while getting user"
+                Example#2:
+                  value: "Error while getting user"
+                Example#3:
+                  value: "Error while getting user"
+  /userService/saveUser:
+    post:
+      description: "Обработка запроса на добавление юзера"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/UsersEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "User added"
+components:
+  schemas:
+    WalletsEntity:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        userId:
+          type: "integer"
+          format: "int64"
+        balance:
+          type: "integer"
+          format: "int32"
+        status:
+          type: "string"
+    UsersEntity:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"

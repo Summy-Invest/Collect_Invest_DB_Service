@@ -1,11 +1,13 @@
 package com.collect.invest.plugins
 
+import com.collect.invest.dao.jdbc.TransactionsDaoJdbc
 import com.collect.invest.dao.jdbc.UsersDaoJdbc
 import com.collect.invest.dao.jdbc.WalletsDaoJdbc
-import com.collect.invest.plugins.routes.financialRotes
 import com.collect.invest.plugins.routes.userRotes
-import io.ktor.server.routing.*
+import financialRoutes
 import io.ktor.server.application.*
+import io.ktor.server.plugins.swagger.*
+import io.ktor.server.routing.*
 
 fun Application.configureRouting() {
 
@@ -17,13 +19,18 @@ fun Application.configureRouting() {
 
     val usersDao = UsersDaoJdbc(dbUrl, dbUsername, dbPassword)
     val walletsDao = WalletsDaoJdbc(dbUrl, dbUsername, dbPassword)
+    val transactionsDao = TransactionsDaoJdbc(dbUrl, dbUsername, dbPassword)
 
     routing {
-        route("userService"){
+
+        swaggerUI(path = "swagger", swaggerFile = "openapi/documentation.yaml", )
+
+
+        route("userService") {
             userRotes(usersDao)
         }
-        route("financialService"){
-            financialRotes(walletsDao)
+        route("financialService") {
+            financialRoutes(walletsDao, transactionsDao)
         }
     }
 }
