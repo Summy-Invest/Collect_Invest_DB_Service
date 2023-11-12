@@ -2,6 +2,7 @@ package com.collect.invest.plugins.controllers.userServiceControllers
 
 import com.collect.invest.dao.UsersDao
 import com.collect.invest.dao.entity.UsersEntity
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -23,23 +24,20 @@ fun Route.userController(usersDao: UsersDao){
     }
 
 //Обработка запроса на получение юзера по его id
-    get("/getUserById/{id}") {
+    post("/authenticateUser") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            if (id != null) {
-                val user: UsersEntity? = usersDao.getById(id)
-                if (user != null) {
-                    call.respond(user)
-                } else {
-                    call.respond("Error while getting user")
-                }
+            val loginRequest = call.receive<LoginRequest>()
+            val user = usersDao.getByEmail(loginRequest.email)
+            if (user != null && usersDao.checkPassword(loginRequest.password, user.password)) {
+                call.respond(mapOf("id" to user.id))
             } else {
-                call.respond("Error while getting user")
+                call.respond(HttpStatusCode.Unauthorized, "Invalid email or password")
             }
         } catch (e: Throwable) {
-            call.respond("Error while getting user")
+            call.respond(HttpStatusCode.InternalServerError, "Error while processing request")
         }
-
     }
 
+
 }
+data class LoginRequest(val email: String, val password: String)

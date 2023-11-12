@@ -65,4 +65,24 @@ class UsersDaoJdbc(
         val password = resultSet.getString("password")
         return UsersEntity(id, name, email, password)
     }
+
+
+    override fun getByEmail(email: String): UsersEntity? {
+        getConnection().use { connection ->
+            val sql = "SELECT * FROM users WHERE email = ?"
+            connection.prepareStatement(sql).use { statement ->
+                statement.setString(1, email)
+                val resultSet = statement.executeQuery()
+                return if (resultSet.next()) {
+                    extractUserFromResultSet(resultSet)
+                } else {
+                    null
+                }
+            }
+        }
+    }
+
+    override fun checkPassword(password: String, storedPassword: String): Boolean {
+        return password == storedPassword
+    }
 }

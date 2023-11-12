@@ -4,9 +4,9 @@ info:
   description: "Collect_Invest_DB_service API"
   version: "1.0.0"
 servers:
-- url: "https://localhost:8080"
+- url: "http://localhost:8080"
 paths:
-  /financialService/wallet/financialService/getWallet/{id}:
+  /financialService/wallet/getWallet/{id}:
     get:
       description: ""
       parameters:
@@ -29,7 +29,7 @@ paths:
                   value: "Error while getting wallet"
                 Example#3:
                   value: "Error while getting wallet"
-  /financialService/wallet/financialService/topupBalance/{id}:
+  /financialService/wallet/topupBalance/{id}:
     put:
       description: ""
       parameters:
@@ -57,7 +57,7 @@ paths:
                   value: "Error while changing balance"
                 Example#2:
                   value: "Error while changing balance"
-  /financialService/wallet/financialService/updateStatus/{id}:
+  /financialService/wallet/updateStatus/{id}:
     put:
       description: ""
       parameters:
@@ -84,7 +84,7 @@ paths:
                   value: "Error while changing wallet status"
                 Example#2:
                   value: "Error while changing wallet status"
-  /financialService/wallet/financialService/withdrawBalance/{id}:
+  /financialService/wallet/withdrawBalance/{id}:
     put:
       description: ""
       parameters:
@@ -112,30 +112,41 @@ paths:
                   value: "Error while changing balance"
                 Example#2:
                   value: "Error while changing balance"
-  /userService/getUserById/{id}:
-    get:
+  /userService/user/authenticateUser:
+    post:
       description: "Обработка запроса на получение юзера по его id"
-      parameters:
-      - name: "id"
-        in: "path"
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
         required: true
-        schema:
-          type: "number"
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
+                $ref: "#/components/schemas/Map_String"
+        "401":
+          description: "Unauthorized"
+          content:
+            '*/*':
+              schema:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Error while getting user"
-                Example#2:
-                  value: "Error while getting user"
-                Example#3:
-                  value: "Error while getting user"
-  /userService/saveUser:
+                  value: "Invalid email or password"
+        "500":
+          description: "Internal Server Error"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while processing request"
+  /userService/user/saveUser:
     post:
       description: "Обработка запроса на добавление юзера"
       requestBody:
@@ -170,6 +181,18 @@ components:
           format: "int32"
         status:
           type: "string"
+    LoginRequest:
+      type: "object"
+      properties:
+        email:
+          type: "string"
+        password:
+          type: "string"
+    Map:
+      type: "object"
+      properties: {}
+    Map_String:
+      type: "string"
     UsersEntity:
       type: "object"
       properties:
