@@ -24,11 +24,12 @@ fun Route.userController(usersDao: UsersDao){
     }
 
 //Обработка запроса на получение юзера по его id
-    post("/authenticateUser") {
+    get("/authenticateUser/{email}/{password}") {
         try {
-            val loginRequest = call.receive<LoginRequest>()
-            val user = usersDao.getByEmail(loginRequest.email)
-            if (user != null && usersDao.checkPassword(loginRequest.password, user.password)) {
+            val email = call.parameters["email"]!!
+            val password = call.parameters["password"]!!
+            val user = usersDao.getByEmail(email)
+            if (user != null && usersDao.checkPassword(password, user.password)) {
                 call.respond(mapOf("id" to user.id))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "Invalid email or password")
