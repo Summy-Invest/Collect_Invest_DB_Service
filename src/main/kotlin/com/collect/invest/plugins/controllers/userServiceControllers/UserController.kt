@@ -14,6 +14,7 @@ fun Route.userController(usersDao: UsersDao){
 
 //Обработка запроса на добавление юзера
     post("/saveUser") {
+        //TODO надо сделать так чтобы тута при регистрации выдавалось тоже самое что при авторизации
         try {
             val user = call.receive<UsersEntity>()
             usersDao.saveUser(user)
@@ -30,7 +31,7 @@ fun Route.userController(usersDao: UsersDao){
             val password = call.parameters["password"]!!
             val user = usersDao.getByEmail(email)
             if (user != null && usersDao.checkPassword(password, user.password)) {
-                call.respond(mapOf("id" to user.id))
+                call.respond(mapOf("id" to user.id, "name" to user.name))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "Invalid email or password")
             }
