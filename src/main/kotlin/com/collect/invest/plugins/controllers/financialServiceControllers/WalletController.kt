@@ -1,6 +1,9 @@
 package com.collect.invest.plugins.controllers.financialServiceControllers
 import com.collect.invest.dao.WalletsDao
 import com.collect.invest.dao.entity.WalletsEntity
+import com.collect.invest.plugins.controllers.financialServiceControllers.entity.Status
+import com.collect.invest.plugins.controllers.financialServiceControllers.entity.TopUp
+import com.collect.invest.plugins.controllers.financialServiceControllers.entity.Withdraw
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -9,41 +12,26 @@ import io.ktor.server.routing.*
 fun Route.walletController(walletsDao: WalletsDao){
 
 
-    put("/updateStatus/{id}") {
+    put("/updateStatus/") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            val newStatus: String = call.receive<String>()
-            if (id != null) {
-                walletsDao.updateStatus(id, newStatus)
-            }else{
-                call.respond("Error while changing wallet status")
-            }
+            val newStatus: Status = call.receive<Status>()
+            walletsDao.updateStatus(newStatus.userId, newStatus.status)
         }catch (e: Throwable){
             call.respond("Error while changing wallet status")
         }
     }
-    put("/topupBalance/{id}") {
+    put("/topUpBalance/") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            val amount: Int = call.receive<Int>()
-            if (id != null) {
-                walletsDao.topupBalance(id, amount)
-            }else{
-                call.respond("Error while changing balance")
-            }
+            val topUp: TopUp = call.receive<TopUp>()
+            walletsDao.topupBalance(topUp.userId, topUp.moneyAmount)
         }catch (e: Throwable){
             call.respond("Error while changing balance")
         }
     }
-    put("/withdrawBalance/{id}") {
+    put("/withdrawBalance/") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            val amount: Int = call.receive<Int>()
-            if (id != null) {
-                walletsDao.withdrawBalance(id, amount)
-            }else{
-                call.respond("Error while changing balance")
-            }
+            val withdraw: Withdraw = call.receive<Withdraw>()
+            walletsDao.withdrawBalance(withdraw.userId, withdraw.moneyAmount)
         }catch (e: Throwable){
             call.respond("Error while changing balance")
         }

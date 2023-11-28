@@ -1,3 +1,4 @@
+package com.collect.invest.plugins.routes
 
 import com.collect.invest.dao.TransactionsDao
 import com.collect.invest.dao.WalletsDao
