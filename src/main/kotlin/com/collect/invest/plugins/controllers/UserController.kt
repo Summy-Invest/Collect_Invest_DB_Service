@@ -12,9 +12,8 @@ import io.ktor.server.routing.*
 
 fun Route.userController(usersDao: UsersDao, walletsDao: WalletsDao){
 
-
-    //Обработка запроса на добавление юзера
-    get("/saveUser") {
+//Обработка запроса на добавление юзера
+    post("/saveUser") {
         try {
             val user = call.receive<UsersEntity>()
             val userId = usersDao.saveUser(user)
@@ -25,12 +24,10 @@ fun Route.userController(usersDao: UsersDao, walletsDao: WalletsDao){
         }
     }
 
-    
     get("/authenticateUser/{email}/{password}") {
         try {
             val email = call.parameters["email"]!!
             val password = call.parameters["password"]!!
-            println("\n " + email)
             val user = usersDao.getByEmail(email)
             if (user != null && usersDao.checkPassword(password, user.password)) {
                 call.respond(HttpStatusCode.OK, mapOf("id" to user.id))

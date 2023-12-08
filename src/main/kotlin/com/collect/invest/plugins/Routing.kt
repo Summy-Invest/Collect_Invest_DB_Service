@@ -5,7 +5,7 @@ import com.collect.invest.dao.jdbc.UsersDaoJdbc
 import com.collect.invest.dao.jdbc.WalletsDaoJdbc
 import com.collect.invest.plugins.routes.collectableRoutes
 import com.collect.invest.plugins.routes.userRotes
-import financialRoutes
+import com.collect.invest.plugins.routes.financialRoutes
 import io.ktor.server.application.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
