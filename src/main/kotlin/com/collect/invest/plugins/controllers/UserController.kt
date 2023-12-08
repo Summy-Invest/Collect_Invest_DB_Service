@@ -18,7 +18,7 @@ fun Route.userController(usersDao: UsersDao, walletsDao: WalletsDao){
             val user = call.receive<UsersEntity>()
             val userId = usersDao.saveUser(user)
             walletsDao.createWallet(userId)
-            call.respond(HttpStatusCode.OK, mapOf("id" to userId))
+            call.respond(HttpStatusCode.OK, mapOf("id" to user.id, "name" to user.name))
         } catch (e: Throwable) {
             call.respond(HttpStatusCode.InternalServerError, e.toString())
         }
@@ -30,7 +30,7 @@ fun Route.userController(usersDao: UsersDao, walletsDao: WalletsDao){
             val password = call.parameters["password"]!!
             val user = usersDao.getByEmail(email)
             if (user != null && usersDao.checkPassword(password, user.password)) {
-                call.respond(HttpStatusCode.OK, mapOf("id" to user.id))
+                call.respond(HttpStatusCode.OK, mapOf("id" to user.id, "name" to user.name))
             } else {
                 call.respond(HttpStatusCode.Unauthorized, "Invalid email or password")
             }
