@@ -4,7 +4,7 @@ info:
   description: "Collect_Invest_DB_service API"
   version: "1.0.0"
 servers:
-- url: "http://localhost:8080"
+- url: "https://localhost:8080"
 paths:
   /financialService/wallet/getWallet/{id}:
     get:
@@ -112,15 +112,20 @@ paths:
                   value: "Error while changing balance"
                 Example#2:
                   value: "Error while changing balance"
-  /userService/user/authenticateUser:
-    post:
+  /userService/user/authenticateUser/{email}/{password}:
+    get:
       description: "Обработка запроса на получение юзера по его id"
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              $ref: "#/components/schemas/LoginRequest"
+      parameters:
+      - name: "email"
+        in: "path"
         required: true
+        schema:
+          type: "string"
+      - name: "password"
+        in: "path"
+        required: true
+        schema:
+          type: "string"
       responses:
         "200":
           description: "OK"
@@ -131,7 +136,7 @@ paths:
         "401":
           description: "Unauthorized"
           content:
-            '*/*':
+            'text/plain':
               schema:
                 type: "string"
               examples:
@@ -180,13 +185,6 @@ components:
           type: "integer"
           format: "int32"
         status:
-          type: "string"
-    LoginRequest:
-      type: "object"
-      properties:
-        email:
-          type: "string"
-        password:
           type: "string"
     Map:
       type: "object"

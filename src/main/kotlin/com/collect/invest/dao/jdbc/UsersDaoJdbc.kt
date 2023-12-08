@@ -21,7 +21,7 @@ class UsersDaoJdbc(
         return DriverManager.getConnection(url, username, password)
     }
 
-    override fun saveUser(entity: UsersEntity) {
+    override fun saveUser(entity: UsersEntity): Long {
         getConnection().use { connection ->
             val sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING user_id;"
             connection.prepareStatement(sql).use { statement ->
@@ -29,18 +29,16 @@ class UsersDaoJdbc(
                 statement.setString(2, entity.email)
                 statement.setString(3, entity.password)
 
-                // Используем executeQuery для получения ResultSet, поскольку ожидаем возвращаемые данные
                 val resultSet = statement.executeQuery()
                 if (resultSet.next()) {
-                    val walletsDao = WalletsDaoJdbc(url, username, password)
-                    val userId = resultSet.getLong("user_id") // Убедитесь, что имя колонки соответствует тому, что возвращается в SQL
-                    walletsDao.createWallet(userId)
+                    return resultSet.getLong("user_id")
                 } else {
-                    throw RuntimeException("Failed to insert user")
+                    throw Exception("User was not inserted.")
                 }
             }
         }
     }
+
 
 
     override fun getById(id: Long): UsersEntity? {

@@ -1,6 +1,7 @@
-package com.collect.invest.plugins.controllers.financialServiceControllers
+package com.collect.invest.plugins.controllers
 import com.collect.invest.dao.WalletsDao
 import com.collect.invest.dao.entity.WalletsEntity
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -15,6 +16,7 @@ fun Route.walletController(walletsDao: WalletsDao){
             val newStatus: String = call.receive<String>()
             if (id != null) {
                 walletsDao.updateStatus(id, newStatus)
+                call.respond(HttpStatusCode.OK)
             }else{
                 call.respond("Error while changing wallet status")
             }
@@ -28,11 +30,12 @@ fun Route.walletController(walletsDao: WalletsDao){
             val amount: Int = call.receive<Int>()
             if (id != null) {
                 walletsDao.topupBalance(id, amount)
+                call.respond(HttpStatusCode.OK)
             }else{
-                call.respond("Error while changing balance")
+                call.respond(HttpStatusCode.BadRequest,"Error while topup balance")
             }
         }catch (e: Throwable){
-            call.respond("Error while changing balance")
+            call.respond(HttpStatusCode.BadRequest,"Error while topup balance")
         }
     }
     put("/withdrawBalance/{id}") {
@@ -41,11 +44,12 @@ fun Route.walletController(walletsDao: WalletsDao){
             val amount: Int = call.receive<Int>()
             if (id != null) {
                 walletsDao.withdrawBalance(id, amount)
+                call.respond(HttpStatusCode.OK)
             }else{
-                call.respond("Error while changing balance")
+                call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance")
             }
         }catch (e: Throwable){
-            call.respond("Error while changing balance")
+            call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance")
         }
     }
     get("/getWallet/{id}") {
@@ -54,15 +58,15 @@ fun Route.walletController(walletsDao: WalletsDao){
             if (id != null) {
                 val wallet: WalletsEntity? =  walletsDao.getById(id)
                 if(wallet != null){
-                    call.respond(wallet)
+                    call.respond(HttpStatusCode.OK, wallet)
                 }else{
-                    call.respond("Error while getting wallet")
+                    call.respond(HttpStatusCode.BadRequest,"Error while getting wallet")
                 }
             }else{
-                call.respond("Error while getting wallet")
+                call.respond(HttpStatusCode.BadRequest,"Error while getting wallet")
             }
         }catch (e: Throwable){
-            call.respond("Error while getting wallet")
+            call.respond(HttpStatusCode.BadRequest,"Error while getting wallet")
         }
     }
 }

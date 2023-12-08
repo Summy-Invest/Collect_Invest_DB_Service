@@ -3,6 +3,7 @@ package com.collect.invest.plugins
 import com.collect.invest.dao.jdbc.TransactionsDaoJdbc
 import com.collect.invest.dao.jdbc.UsersDaoJdbc
 import com.collect.invest.dao.jdbc.WalletsDaoJdbc
+import com.collect.invest.plugins.routes.collectableRoutes
 import com.collect.invest.plugins.routes.userRotes
 import financialRoutes
 import io.ktor.server.application.*
@@ -27,10 +28,13 @@ fun Application.configureRouting() {
 
 
         route("userService") {
-            userRotes(usersDao)
+            userRotes(usersDao, walletsDao)
         }
         route("financialService") {
             financialRoutes(walletsDao, transactionsDao)
+        }
+        route("collectableService") {
+            collectableRoutes(walletsDao, transactionsDao)
         }
     }
 }

@@ -19,14 +19,20 @@ class TransactionsDaoJdbc(
     private fun getConnection(): Connection {
         return DriverManager.getConnection(url, username, password)
     }
-    override fun saveTransaction(entity: TransactionsEntity) {
+    override fun saveTransaction(entity: TransactionsEntity): Long{
         getConnection().use { connection ->
-            val sql = "INSERT INTO transactions (amount, status, wallet_id) VALUES (?, ?, ?);"
+            val sql = "INSERT INTO transactions (amount, status, wallet_id) VALUES (?, ?, ?) RETURNING transaction_id;"
             connection.prepareStatement(sql).use { statement ->
                 statement.setInt(1, entity.amount)
                 statement.setString(2, entity.status)
                 statement.setLong(3, entity.walletId)
-                statement.executeUpdate()
+
+                val resultSet = statement.executeQuery()
+                if (resultSet.next()) {
+                    return resultSet.getLong("transaction_id")
+                } else {
+                    throw Exception("User was not inserted.")
+                }
             }
         }
     }
@@ -46,12 +52,12 @@ class TransactionsDaoJdbc(
         }
     }
 
-    override fun updateStatus(id: Long, status: String) {
+    override fun updateStatus(transaction: TransactionsEntity) {
         getConnection().use { connection ->
             val sql = "UPDATE transactions SET status = ? WHERE transaction_id = ?;"
             connection.prepareStatement(sql).use { statement ->
-                statement.setString(1, status)
-                statement.setLong(2, id)
+                statement.setString(1, transaction.status)
+                statement.setLong(2, transaction.id)
                 statement.executeUpdate()
             }
         }
