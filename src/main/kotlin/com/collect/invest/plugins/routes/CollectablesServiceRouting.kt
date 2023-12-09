@@ -1,20 +1,13 @@
 package com.collect.invest.plugins.routes
 
-import com.collect.invest.dao.TransactionsDao
-import com.collect.invest.dao.WalletsDao
-import com.collect.invest.plugins.controllers.transactionController
-import com.collect.invest.plugins.controllers.walletController
+import com.collect.invest.dao.CollectablesDao
+import com.collect.invest.plugins.controllers.collectablesController
 import io.ktor.server.routing.*
 
-fun Route.collectableRoutes(walletsDao: WalletsDao, transactionsDao: TransactionsDao) {
+fun Route.collectableRoutes(collectablesDao: CollectablesDao) {
 
     // Маршруты для кошельков
-    route("/wallet") {
-        walletController(walletsDao)
-    }
-
-    // Маршруты для транзакций
-    route("/transaction") {
-        transactionController(transactionsDao)
+    route("/collectable") {
+        collectablesController(collectablesDao)
     }
 }

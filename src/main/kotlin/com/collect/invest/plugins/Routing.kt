@@ -1,11 +1,12 @@
 package com.collect.invest.plugins
 
+import com.collect.invest.dao.jdbc.CollectablesDaoJdbc
 import com.collect.invest.dao.jdbc.TransactionsDaoJdbc
 import com.collect.invest.dao.jdbc.UsersDaoJdbc
 import com.collect.invest.dao.jdbc.WalletsDaoJdbc
 import com.collect.invest.plugins.routes.collectableRoutes
-import com.collect.invest.plugins.routes.userRotes
 import com.collect.invest.plugins.routes.financialRoutes
+import com.collect.invest.plugins.routes.userRotes
 import io.ktor.server.application.*
 import io.ktor.server.plugins.swagger.*
 import io.ktor.server.routing.*
@@ -21,6 +22,7 @@ fun Application.configureRouting() {
     val usersDao = UsersDaoJdbc(dbUrl, dbUsername, dbPassword)
     val walletsDao = WalletsDaoJdbc(dbUrl, dbUsername, dbPassword)
     val transactionsDao = TransactionsDaoJdbc(dbUrl, dbUsername, dbPassword)
+    val collectablesDao = CollectablesDaoJdbc(dbUrl, dbUsername, dbPassword)
 
     routing {
 
@@ -34,7 +36,7 @@ fun Application.configureRouting() {
             financialRoutes(walletsDao, transactionsDao)
         }
         route("collectableService") {
-            collectableRoutes(walletsDao, transactionsDao)
+            collectableRoutes(collectablesDao)
         }
     }
 }
