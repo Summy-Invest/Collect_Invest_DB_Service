@@ -24,32 +24,32 @@ fun Route.walletController(walletsDao: WalletsDao){
             call.respond("Error while changing wallet status")
         }
     }
-    put("/topupBalance/{id}") {
+    put("/topUpBalance/{id}/{amount}") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            val amount: Int = call.receive<Int>()
+            val id = call.parameters["id"]?.toLong()
+            val amount = call.parameters["amount"]?.toInt()
             if (id != null) {
-                walletsDao.topupBalance(id, amount)
+                walletsDao.topupBalance(id, amount!!)
                 call.respond(HttpStatusCode.OK)
             }else{
-                call.respond(HttpStatusCode.BadRequest,"Error while topup balance")
+                call.respond("Error while changing balance id is null")
             }
         }catch (e: Throwable){
-            call.respond(HttpStatusCode.BadRequest,"Error while topup balance")
+            call.respond(e.toString())
         }
     }
-    put("/withdrawBalance/{id}") {
+    put("/withdrawBalance/{id}/{amount}") {
         try {
-            val id = call.parameters["id"]?.toLongOrNull()
-            val amount: Int = call.receive<Int>()
+            val id = call.parameters["id"]?.toLong()
+            val amount = call.parameters["amount"]?.toInt()
             if (id != null) {
-                walletsDao.withdrawBalance(id, amount)
+                walletsDao.withdrawBalance(id, amount!!)
                 call.respond(HttpStatusCode.OK)
             }else{
-                call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance")
+                call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance id is null")
             }
         }catch (e: Throwable){
-            call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance")
+            call.respond(HttpStatusCode.BadRequest,"Error while withdraw balance adfartewr")
         }
     }
     get("/getWallet/{id}") {

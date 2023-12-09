@@ -21,11 +21,10 @@ class TransactionsDaoJdbc(
     }
     override fun saveTransaction(entity: TransactionsEntity): Long{
         getConnection().use { connection ->
-            val sql = "INSERT INTO transactions (amount, status, wallet_id) VALUES (?, ?, ?) RETURNING transaction_id;"
+            val sql = "INSERT INTO transactions (amount, wallet_id) VALUES (?, ?) RETURNING transaction_id;"
             connection.prepareStatement(sql).use { statement ->
                 statement.setInt(1, entity.amount)
-                statement.setString(2, entity.status)
-                statement.setLong(3, entity.walletId)
+                statement.setLong(2, entity.walletId)
 
                 val resultSet = statement.executeQuery()
                 if (resultSet.next()) {

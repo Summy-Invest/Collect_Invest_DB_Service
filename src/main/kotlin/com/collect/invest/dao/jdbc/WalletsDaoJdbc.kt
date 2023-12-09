@@ -51,7 +51,7 @@ class WalletsDaoJdbc(
             connection.prepareStatement(sql).use { statement ->
                 statement.setString(1, status)
                 statement.setLong(2, userId)
-                statement.executeQuery()
+                statement.executeUpdate()
             }
         }
     }
@@ -64,34 +64,25 @@ class WalletsDaoJdbc(
         return WalletsEntity(id, userId, balance, status)
     }
 
-    override fun topupBalance(userId: Long, amount: Int): String {
+    override fun topupBalance(userId: Long, amount: Int){
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money + ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
-                try {
-                    statement.setInt(1, amount)
-                    statement.setLong(2, userId)
-                }catch (e: Throwable){
-                    return "Ошибка"
-                }
-                return "Баланс пополнен на $amount"
-
+                statement.setInt(1, amount)
+                statement.setLong(2, userId)
+                statement.executeUpdate()
             }
         }
     }
 
-    override fun withdrawBalance(userId: Long, amount: Int): String {
+    override fun withdrawBalance(userId: Long, amount: Int){
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money - ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
-                try {
-                    statement.setInt(1, amount)
-                    statement.setLong(2, userId)
-                }catch (e: Throwable){
-                    return "Ошибка"
-                }
-                return "Списание на сумму $amount"
+                statement.setInt(1, amount)
+                statement.setLong(2, userId)
 
+                statement.executeUpdate()
             }
         }
     }

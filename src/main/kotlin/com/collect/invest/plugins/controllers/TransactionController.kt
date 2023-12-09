@@ -12,7 +12,7 @@ import io.ktor.server.routing.*
 fun Route.transactionController(transactionsDao: TransactionsDao){
 
 
-    put("/createTransiction") {
+    post("/createTransaction") {
         try {
             val transaction = call.receive<TransactionsEntity>()
             val transactionId = transactionsDao.saveTransaction(transaction)
@@ -23,7 +23,7 @@ fun Route.transactionController(transactionsDao: TransactionsDao){
     }
 
 
-    patch("/updateTransiction") {
+    patch("/updateStatus") {
         try {
             val transaction = call.receive<TransactionsEntity>()
             transactionsDao.updateStatus(transaction)

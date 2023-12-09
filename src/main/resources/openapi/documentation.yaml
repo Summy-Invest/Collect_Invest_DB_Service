@@ -6,6 +6,194 @@ info:
 servers:
 - url: "https://localhost:8080"
 paths:
+  /collectableService/transaction/createTransiction:
+    put:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/TransactionsEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while creating transaction"
+  /collectableService/transaction/updateTransiction:
+    patch:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/TransactionsEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+              examples:
+                Example#1:
+                  value: "Error while updating status"
+  /collectableService/wallet/getWallet/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/WalletsEntity"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while getting wallet"
+                Example#2:
+                  value: "Error while getting wallet"
+                Example#3:
+                  value: "Error while getting wallet"
+  /collectableService/wallet/topUpBalance/{id}/{amount}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      - name: "amount"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+              examples:
+                Example#1:
+                  value: "Error while changing balance id is null"
+  /collectableService/wallet/updateStatus/{id}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: "string"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+              examples:
+                Example#1:
+                  value: "Error while changing wallet status"
+                Example#2:
+                  value: "Error while changing wallet status"
+  /collectableService/wallet/withdrawBalance/{id}/{amount}:
+    put:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      - name: "amount"
+        in: "path"
+        required: true
+        schema:
+          type: "integer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while withdraw balance adfartewr"
+                Example#2:
+                  value: "Error while withdraw balance id is null"
+  /financialService/transaction/createTransiction:
+    put:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/TransactionsEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while creating transaction"
+  /financialService/transaction/updateTransiction:
+    patch:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/TransactionsEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+              examples:
+                Example#1:
+                  value: "Error while updating status"
   /financialService/wallet/getWallet/{id}:
     get:
       description: ""
@@ -21,6 +209,12 @@ paths:
           content:
             '*/*':
               schema:
+                $ref: "#/components/schemas/WalletsEntity"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
                 type: "string"
               examples:
                 Example#1:
@@ -29,7 +223,7 @@ paths:
                   value: "Error while getting wallet"
                 Example#3:
                   value: "Error while getting wallet"
-  /financialService/wallet/topupBalance/{id}:
+  /financialService/wallet/topUpBalance/{id}/{amount}:
     put:
       description: ""
       parameters:
@@ -38,25 +232,21 @@ paths:
         required: true
         schema:
           type: "number"
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              type: "integer"
-              format: "int32"
+      - name: "amount"
+        in: "path"
         required: true
+        schema:
+          type: "integer"
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
-                type: "string"
+                type: "object"
               examples:
                 Example#1:
-                  value: "Error while changing balance"
-                Example#2:
-                  value: "Error while changing balance"
+                  value: "Error while changing balance id is null"
   /financialService/wallet/updateStatus/{id}:
     put:
       description: ""
@@ -78,13 +268,13 @@ paths:
           content:
             '*/*':
               schema:
-                type: "string"
+                type: "object"
               examples:
                 Example#1:
                   value: "Error while changing wallet status"
                 Example#2:
                   value: "Error while changing wallet status"
-  /financialService/wallet/withdrawBalance/{id}:
+  /financialService/wallet/withdrawBalance/{id}/{amount}:
     put:
       description: ""
       parameters:
@@ -93,28 +283,32 @@ paths:
         required: true
         schema:
           type: "number"
-      requestBody:
-        content:
-          '*/*':
-            schema:
-              type: "integer"
-              format: "int32"
+      - name: "amount"
+        in: "path"
         required: true
+        schema:
+          type: "integer"
       responses:
         "200":
           description: "OK"
           content:
             '*/*':
               schema:
+                type: "object"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Error while changing balance"
+                  value: "Error while withdraw balance adfartewr"
                 Example#2:
-                  value: "Error while changing balance"
+                  value: "Error while withdraw balance id is null"
   /userService/user/authenticateUser/{email}/{password}:
     get:
-      description: "Обработка запроса на получение юзера по его id"
+      description: ""
       parameters:
       - name: "email"
         in: "path"
@@ -136,7 +330,7 @@ paths:
         "401":
           description: "Unauthorized"
           content:
-            'text/plain':
+            '*/*':
               schema:
                 type: "string"
               examples:
@@ -166,12 +360,34 @@ paths:
           content:
             '*/*':
               schema:
+                $ref: "#/components/schemas/Map_String"
+        "500":
+          description: "Internal Server Error"
+          content:
+            '*/*':
+              schema:
                 type: "string"
-              examples:
-                Example#1:
-                  value: "User added"
 components:
   schemas:
+    TransactionsEntity:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+          format: "int64"
+        amount:
+          type: "integer"
+          format: "int32"
+        status:
+          type: "string"
+        walletId:
+          type: "integer"
+          format: "int64"
+    Map:
+      type: "object"
+      properties: {}
+    Map_String:
+      type: "string"
     WalletsEntity:
       type: "object"
       properties:
@@ -186,11 +402,6 @@ components:
           format: "int32"
         status:
           type: "string"
-    Map:
-      type: "object"
-      properties: {}
-    Map_String:
-      type: "string"
     UsersEntity:
       type: "object"
       properties:
