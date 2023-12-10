@@ -52,6 +52,31 @@ class CollectablesDaoJdbc(
     }
 
 
+    override fun getPrice(id: Long): Double {
+        getConnection().use { connection ->
+            val sql = "SELECT current_price FROM collectibles WHERE collectible_id = ?"
+            connection.prepareStatement(sql).use { statement ->
+                statement.setLong(1, id)
+                val resultSet = statement.executeQuery()
+
+                return resultSet.getDouble("current_price")
+            }
+        }
+    }
+
+
+    override fun updatePrice(id: Long, newPrice: Double) {
+        getConnection().use { connection ->
+            val sql = "UPDATE collectibles SET current_price = ? WHERE collectible_id = ?;"
+            connection.prepareStatement(sql).use { statement ->
+                statement.setDouble(1, newPrice)
+                statement.setLong(2, id)
+                statement.executeUpdate()
+            }
+        }
+    }
+
+
     private fun extractCollectableFromResultSet(resultSet: ResultSet): CollectablesEntity {
         val id = resultSet.getLong("collectible_id")
         val name = resultSet.getString("name")

@@ -8,4 +8,8 @@ interface CollectablesDao {
 
     fun getAllCollectables(): List<CollectablesEntity>
 
+    fun getPrice(id: Long): Double
+
+    fun updatePrice(id: Long, newPrice: Double)
+
 }
