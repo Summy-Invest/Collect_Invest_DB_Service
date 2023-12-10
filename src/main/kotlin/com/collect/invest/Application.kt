@@ -16,6 +16,7 @@ fun main() {
     System.setProperty("db.url", "jdbc:postgresql://localhost:5432/postgres")
     System.setProperty("db.username", "postgres")
     System.setProperty("db.password", "password")
+    System.setProperty("image.storage.url", "src/main/resources/ImageStorage/")
 
     embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
         .start(wait = true)

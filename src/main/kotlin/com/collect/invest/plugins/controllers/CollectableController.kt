@@ -27,4 +27,14 @@ fun Route.collectablesController(collectablesDao: CollectablesDao){
         }
     }
 
+
+    get("/getAllCollectibles") {
+        try {
+            val collectable: List<CollectablesEntity> = collectablesDao.getAllCollectables()
+            call.respond(HttpStatusCode.OK, collectable)
+        }catch (e: Throwable){
+            call.respond(HttpStatusCode.BadRequest,"Error while getting collectables")
+        }
+    }
+
 }

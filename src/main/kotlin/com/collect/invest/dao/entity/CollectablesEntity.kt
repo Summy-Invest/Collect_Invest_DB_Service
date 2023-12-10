@@ -5,7 +5,7 @@ data class CollectablesEntity(
     val name: String,
     val description: String,
     val category: String,
-    val photoLink: String,
+    val photoUrl: String,
     val currentPrice: Double,
     val availableShares: Int
-);
+)

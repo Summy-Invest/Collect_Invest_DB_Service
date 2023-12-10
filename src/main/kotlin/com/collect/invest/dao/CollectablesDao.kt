@@ -6,4 +6,6 @@ interface CollectablesDao {
 
     fun getById(id: Long): CollectablesEntity?
 
+    fun getAllCollectables(): List<CollectablesEntity>
+
 }

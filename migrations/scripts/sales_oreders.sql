@@ -4,8 +4,7 @@ CREATE TABLE sales_oreders(
     name varchar(255),
     description text,
     price int,
-    category_id int,
+    category int,
     photo bytea,
-    FOREIGN KEY (user_id) REFERENCES users(user_id),
-    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

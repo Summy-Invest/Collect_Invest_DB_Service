@@ -4,8 +4,29 @@ info:
   description: "Collect_Invest_DB_service API"
   version: "1.0.0"
 servers:
-- url: "https://localhost:8080"
+- url: "https://Collect_Invest_DB_service"
 paths:
+  /collectableService/collectable/getAllCollectibles:
+    get:
+      description: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/CollectablesEntity"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while getting collectables"
   /collectableService/collectable/getCollectableById/{id}:
     get:
       description: ""
@@ -30,11 +51,11 @@ paths:
                 type: "string"
               examples:
                 Example#1:
-                  value: "Error while getting collectable"
+                  value: "Error while getting collectable 3"
                 Example#2:
-                  value: "Error while getting collectable"
+                  value: "Error while getting collectable 2"
                 Example#3:
-                  value: "Error while getting collectable"
+                  value: "Error while getting collectable 1"
   /financialService/transaction/createTransaction:
     post:
       description: ""

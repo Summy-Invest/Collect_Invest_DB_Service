@@ -37,15 +37,30 @@ class CollectablesDaoJdbc(
     }
 
 
+    override fun getAllCollectables(): List<CollectablesEntity> {
+        val collectibles = mutableListOf<CollectablesEntity>()
+        getConnection().use { connection ->
+            val sql = "SELECT * FROM collectibles"
+            connection.prepareStatement(sql).use { statement ->
+                val resultSet = statement.executeQuery()
+                while (resultSet.next()) {
+                    collectibles.add(extractCollectableFromResultSet(resultSet))
+                }
+            }
+        }
+        return collectibles
+    }
+
+
     private fun extractCollectableFromResultSet(resultSet: ResultSet): CollectablesEntity {
         val id = resultSet.getLong("collectible_id")
         val name = resultSet.getString("name")
         val description = resultSet.getString("description")
-        val category = resultSet.getString("category_id")
-        val photoLink = resultSet.getString("photo_link")
+        val category = resultSet.getString("category")
+        val photo = "http://localhost:8080/image/" + resultSet.getString("photo_url")
         val currentPrice = resultSet.getDouble("current_price")
         val availableShares = resultSet.getInt("available_shares")
-        return CollectablesEntity(id, name, description, category, photoLink, currentPrice, availableShares)
+        return CollectablesEntity(id, name, description, category, photo, currentPrice, availableShares)
     }
 
 }
