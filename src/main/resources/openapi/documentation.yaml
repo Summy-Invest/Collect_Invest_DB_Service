@@ -4,7 +4,7 @@ info:
   description: "Collect_Invest_DB_service API"
   version: "1.0.0"
 servers:
-- url: "https://Collect_Invest_DB_service"
+- url: "https://localhost:8080"
 paths:
   /collectableService/collectable/getAllCollectibles:
     get:
@@ -56,6 +56,58 @@ paths:
                   value: "Error while getting collectable 2"
                 Example#3:
                   value: "Error while getting collectable 1"
+  /collectableService/collectable/getPrice/{id}:
+    get:
+      description: ""
+      parameters:
+      - name: "id"
+        in: "path"
+        required: true
+        schema:
+          type: "number"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Map_String"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while getting price"
+                Example#2:
+                  value: "Error while getting price"
+  /collectableService/collectable/updatePrice:
+    patch:
+      description: ""
+      requestBody:
+        content:
+          '*/*':
+            schema:
+              $ref: "#/components/schemas/CollectablesEntity"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+        "400":
+          description: "Bad Request"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+              examples:
+                Example#1:
+                  value: "Error while updating price"
   /financialService/transaction/createTransaction:
     post:
       description: ""
@@ -281,7 +333,7 @@ components:
           type: "string"
         category:
           type: "string"
-        photoLink:
+        photoUrl:
           type: "string"
         currentPrice:
           type: "number"
@@ -289,6 +341,11 @@ components:
         availableShares:
           type: "integer"
           format: "int32"
+    Map:
+      type: "object"
+      properties: {}
+    Map_String:
+      type: "string"
     TransactionsEntity:
       type: "object"
       properties:
@@ -303,11 +360,6 @@ components:
         walletId:
           type: "integer"
           format: "int64"
-    Map:
-      type: "object"
-      properties: {}
-    Map_String:
-      type: "string"
     WalletsEntity:
       type: "object"
       properties:

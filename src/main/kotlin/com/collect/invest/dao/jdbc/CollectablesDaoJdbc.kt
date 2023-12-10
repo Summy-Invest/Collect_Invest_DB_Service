@@ -58,8 +58,11 @@ class CollectablesDaoJdbc(
             connection.prepareStatement(sql).use { statement ->
                 statement.setLong(1, id)
                 val resultSet = statement.executeQuery()
-
-                return resultSet.getDouble("current_price")
+                if (resultSet.next()) {
+                    return resultSet.getDouble("current_price")
+                } else {
+                    throw NoSuchElementException("Collectible with ID $id not found")
+                }
             }
         }
     }
