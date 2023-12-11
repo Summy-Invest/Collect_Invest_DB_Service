@@ -4,6 +4,6 @@ CREATE TABLE collectibles(
     description text,
     category VARCHAR(255),
     photo_url varchar(255),
-    current_price float,
+    current_price NUMERIC(15, 2),
     available_shares int
 );
