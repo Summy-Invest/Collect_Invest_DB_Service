@@ -27,10 +27,10 @@ class StockPortfolioDaoJdbc(
             connection.prepareStatement(sql).use { statement ->
                 statement.setDate(1, DateUtils.localDateTimeToSqlDate(entity.date))
                 statement.setInt(2, entity.count)
-                statement.setInt(3, entity.collectibleId)
-                statement.setInt(4, entity.userId)
+                statement.setLong(3, entity.collectibleId)
+                statement.setLong(4, entity.userId)
                 statement.setDouble(5, entity.totalPrice)
-                statement.setInt(6, entity.transactionId)
+                statement.setLong(6, entity.transactionId)
 
                 statement.executeQuery()
             }

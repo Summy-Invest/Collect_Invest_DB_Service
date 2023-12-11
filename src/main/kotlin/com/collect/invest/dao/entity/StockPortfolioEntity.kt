@@ -3,11 +3,11 @@ package com.collect.invest.dao.entity
 import java.time.LocalDateTime
 
 data class StockPortfolioEntity(
-    val id: Int,
+    val id: Long,
     val date: LocalDateTime,
     val count: Int,
-    val collectibleId: Int,
-    val userId: Int,
+    val collectibleId: Long,
+    val userId: Long,
     val totalPrice: Double,
-    val transactionId: Int
+    val transactionId: Long
 )
