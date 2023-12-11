@@ -35,16 +35,16 @@ class StockPortfolioDaoJdbc(
 
     override fun addPurchase(entity: StockPortfolioEntity) {
         getConnection().use { connection ->
-            val sql = "INSERT INTO stock_portfolio (order_date, shares_count, collectible_id, user_id, total_price, transaction_id) VALUES (?, ?, ?, ?, ?);"
+            val sql = "INSERT INTO stock_portfolio (order_date, shares_count, collectible_id, user_id, total_price, transaction_id) VALUES (?, ?, ?, ?, ?, ?);"
             connection.prepareStatement(sql).use { statement ->
-                statement.setDate(1, DateUtils.localDateTimeToSqlDate(entity.date))
+                statement.setString(1, entity.date)
                 statement.setInt(2, entity.count)
                 statement.setLong(3, entity.collectibleId)
                 statement.setLong(4, entity.userId)
                 statement.setDouble(5, entity.totalPrice)
                 statement.setLong(6, entity.transactionId)
 
-                statement.executeQuery()
+                statement.executeUpdate()
             }
         }
     }
@@ -59,7 +59,7 @@ class StockPortfolioDaoJdbc(
 
                 val result = statement.executeQuery()
                 if (result.next()) {
-                    return result.getInt("shares_count")
+                    return result.getInt("total_shares")
                 } else {
                     throw NoSuchElementException("Not found")
                 }

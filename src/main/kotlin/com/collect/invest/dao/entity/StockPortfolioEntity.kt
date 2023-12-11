@@ -1,10 +1,8 @@
 package com.collect.invest.dao.entity
 
-import java.time.LocalDateTime
-
 data class StockPortfolioEntity(
     val id: Long,
-    val date: LocalDateTime,
+    val date: String,
     val count: Int,
     val collectibleId: Long,
     val userId: Long,

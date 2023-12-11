@@ -1,6 +1,6 @@
 CREATE TABLE stock_portfolio(
     order_id SERIAL PRIMARY KEY,
-    order_date timestamp,
+    order_date varchar(255),
     shares_count INT,
     collectible_id INT,
     user_id INT,
