@@ -23,7 +23,7 @@ class TransactionsDaoJdbc(
         getConnection().use { connection ->
             val sql = "INSERT INTO transactions (amount, wallet_id) VALUES (?, ?) RETURNING transaction_id;"
             connection.prepareStatement(sql).use { statement ->
-                statement.setInt(1, entity.amount)
+                statement.setDouble(1, entity.amount)
                 statement.setLong(2, entity.walletId)
 
                 val resultSet = statement.executeQuery()
@@ -64,7 +64,7 @@ class TransactionsDaoJdbc(
 
     private fun extractTransactionFromResultSet(resultSet: ResultSet): TransactionsEntity {
         val id = resultSet.getLong("transaction_id")
-        val amount = resultSet.getInt("amount")
+        val amount = resultSet.getDouble("amount")
         val status = resultSet.getString("status")
         val walletId = resultSet.getLong("wallet_id")
         return TransactionsEntity(id, amount, status, walletId)

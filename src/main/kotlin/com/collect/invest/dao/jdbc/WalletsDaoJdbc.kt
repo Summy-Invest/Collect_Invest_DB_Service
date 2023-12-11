@@ -59,27 +59,27 @@ class WalletsDaoJdbc(
     private fun extractWalletFromResultSet(resultSet: ResultSet): WalletsEntity {
         val id = resultSet.getLong("wallet_id")
         val userId = resultSet.getLong("user_id")
-        val balance = resultSet.getInt("money")
+        val balance = resultSet.getDouble("money")
         val status = resultSet.getString("status")
         return WalletsEntity(id, userId, balance, status)
     }
 
-    override fun topupBalance(userId: Long, amount: Int){
+    override fun topupBalance(userId: Long, amount: Double){
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money + ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
-                statement.setInt(1, amount)
+                statement.setDouble(1, amount)
                 statement.setLong(2, userId)
                 statement.executeUpdate()
             }
         }
     }
 
-    override fun withdrawBalance(userId: Long, amount: Int){
+    override fun withdrawBalance(userId: Long, amount: Double){
         getConnection().use { connection ->
             val sql = "UPDATE wallets SET money = money - ? WHERE user_id = ?"
             connection.prepareStatement(sql).use { statement ->
-                statement.setInt(1, amount)
+                statement.setDouble(1, amount)
                 statement.setLong(2, userId)
 
                 statement.executeUpdate()

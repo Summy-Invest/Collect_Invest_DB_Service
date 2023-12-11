@@ -27,7 +27,7 @@ fun Route.walletController(walletsDao: WalletsDao){
     put("/topUpBalance/{id}/{amount}") {
         try {
             val id = call.parameters["id"]?.toLong()
-            val amount = call.parameters["amount"]?.toInt()
+            val amount = call.parameters["amount"]?.toDouble()
             if (id != null) {
                 walletsDao.topupBalance(id, amount!!)
                 call.respond(HttpStatusCode.OK)
@@ -41,7 +41,7 @@ fun Route.walletController(walletsDao: WalletsDao){
     put("/withdrawBalance/{id}/{amount}") {
         try {
             val id = call.parameters["id"]?.toLong()
-            val amount = call.parameters["amount"]?.toInt()
+            val amount = call.parameters["amount"]?.toDouble()
             if (id != null) {
                 walletsDao.withdrawBalance(id, amount!!)
                 call.respond(HttpStatusCode.OK)
