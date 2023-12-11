@@ -1,9 +1,6 @@
 package com.collect.invest.plugins
 
-import com.collect.invest.dao.jdbc.CollectablesDaoJdbc
-import com.collect.invest.dao.jdbc.TransactionsDaoJdbc
-import com.collect.invest.dao.jdbc.UsersDaoJdbc
-import com.collect.invest.dao.jdbc.WalletsDaoJdbc
+import com.collect.invest.dao.jdbc.*
 import com.collect.invest.plugins.routes.collectableRoutes
 import com.collect.invest.plugins.routes.financialRoutes
 import com.collect.invest.plugins.routes.userRotes
@@ -29,6 +26,7 @@ fun Application.configureRouting() {
     val walletsDao = WalletsDaoJdbc(dbUrl, dbUsername, dbPassword)
     val transactionsDao = TransactionsDaoJdbc(dbUrl, dbUsername, dbPassword)
     val collectablesDao = CollectablesDaoJdbc(dbUrl, dbUsername, dbPassword)
+    val stockPortfolioDao = StockPortfolioDaoJdbc(dbUrl, dbUsername, dbPassword)
 
     val imageStorage = File(imageStoragePath)
 
@@ -45,7 +43,7 @@ fun Application.configureRouting() {
             financialRoutes(walletsDao, transactionsDao)
         }
         route("collectableService") {
-            collectableRoutes(collectablesDao)
+            collectableRoutes(collectablesDao, stockPortfolioDao)
         }
     }
 }

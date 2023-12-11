@@ -12,4 +12,6 @@ interface CollectablesDao {
 
     fun updatePrice(id: Long, newPrice: Double)
 
+    fun updateCollectible(id: Long, shares: Int)
+
 }

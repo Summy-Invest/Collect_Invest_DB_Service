@@ -12,13 +12,17 @@ import io.ktor.server.routing.*
 
 fun Route.userController(usersDao: UsersDao, walletsDao: WalletsDao){
 
-//Обработка запроса на добавление юзера
     post("/saveUser") {
         try {
             val user = call.receive<UsersEntity>()
-            val userId = usersDao.saveUser(user)
-            walletsDao.createWallet(userId)
-            call.respond(HttpStatusCode.OK, mapOf("id" to user.id, "name" to user.name))
+            usersDao.saveUser(user)
+            val newUser = usersDao.getByEmail(user.email)
+            if (newUser != null) {
+                walletsDao.createWallet(newUser.id)
+                call.respond(HttpStatusCode.OK, mapOf("id" to newUser.id, "name" to newUser.name))
+            }else{
+                call.respond(HttpStatusCode.InternalServerError, "fadofneqrofnqeorwnforjmf3")
+            }
         } catch (e: Throwable) {
             call.respond(HttpStatusCode.InternalServerError, e.toString())
         }

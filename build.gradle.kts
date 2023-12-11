@@ -26,6 +26,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-gson-jvm")
     implementation("io.ktor:ktor-server-cors:2.3.5")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.5")
+    implementation("com.zaxxer:HikariCP:5.0.1")
 }
 
 tasks.test {

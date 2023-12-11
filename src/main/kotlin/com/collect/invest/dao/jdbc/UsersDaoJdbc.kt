@@ -2,8 +2,8 @@ package com.collect.invest.dao.jdbc
 
 import com.collect.invest.dao.UsersDao
 import com.collect.invest.dao.entity.UsersEntity
-import java.sql.Connection
-import java.sql.DriverManager
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import java.sql.ResultSet
 
 class UsersDaoJdbc(
@@ -12,29 +12,36 @@ class UsersDaoJdbc(
         private val password: String
 ) : UsersDao {
 
+    private val dataSource: HikariDataSource
+
     init {
-        // Загружаем драйвер JDBC (указываем драйвер для вашей конкретной базы данных)
-        Class.forName("org.postgresql.Driver")
+        val config = HikariConfig().apply {
+            jdbcUrl = this@UsersDaoJdbc.url
+            this.username = this@UsersDaoJdbc.username
+            this.password = this@UsersDaoJdbc.password
+            addDataSourceProperty("cachePrepStmts", "true")
+            addDataSourceProperty("prepStmtCacheSize", "250")
+            addDataSourceProperty("prepStmtCacheSqlLimit", "2048")
+            maximumPoolSize = 10 // Установка максимального размера пула соединений
+            minimumIdle = 2 // Установка минимального количества простаивающих соединений в пуле
+            idleTimeout = 600000 // 10 минут - время простоя, после которого соединение будет удалено из пула
+            maxLifetime = 1800000 // 30 минут - максимальное время жизни соединения
+            connectionTimeout = 30000 // 30 секунд - максимальное время ожидания соединения из пула
+        }
+        dataSource = HikariDataSource(config)
     }
 
-    private fun getConnection(): Connection {
-        return DriverManager.getConnection(url, username, password)
-    }
+    private fun getConnection() = dataSource.connection
 
-    override fun saveUser(entity: UsersEntity): Long {
+    override fun saveUser(entity: UsersEntity){
         getConnection().use { connection ->
-            val sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?) RETURNING user_id;"
+            val sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?);"
             connection.prepareStatement(sql).use { statement ->
                 statement.setString(1, entity.name)
                 statement.setString(2, entity.email)
                 statement.setString(3, entity.password)
 
-                val resultSet = statement.executeQuery()
-                if (resultSet.next()) {
-                    return resultSet.getLong("user_id")
-                } else {
-                    throw Exception("User was not inserted.")
-                }
+                statement.executeUpdate()
             }
         }
     }
@@ -82,5 +89,9 @@ class UsersDaoJdbc(
 
     override fun checkPassword(password: String, storedPassword: String): Boolean {
         return password == storedPassword
+    }
+
+    fun close() {
+        dataSource.close()
     }
 }

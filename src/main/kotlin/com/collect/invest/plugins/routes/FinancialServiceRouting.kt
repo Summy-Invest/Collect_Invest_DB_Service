@@ -8,12 +8,10 @@ import io.ktor.server.routing.*
 
 fun Route.financialRoutes(walletsDao: WalletsDao, transactionsDao: TransactionsDao) {
 
-        // Маршруты для кошельков
         route("/wallet") {
             walletController(walletsDao)
         }
 
-        // Маршруты для транзакций
         route("/transaction") {
             transactionController(transactionsDao)
         }
