@@ -2,9 +2,11 @@ package com.collect.invest.dao.jdbc
 
 import Utils.DateUtils
 import com.collect.invest.dao.StockPortfolioDao
+import com.collect.invest.dao.entity.CollectablesEntity
 import com.collect.invest.dao.entity.StockPortfolioEntity
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import java.sql.ResultSet
 
 class StockPortfolioDaoJdbc(
     private val url: String,
@@ -65,8 +67,39 @@ class StockPortfolioDaoJdbc(
                 }
             }
         }
-
     }
+
+    override fun getAllUserCollectibles(userId: Long): List<CollectablesEntity>{
+        val collectibles = mutableListOf<CollectablesEntity>()
+        getConnection().use { connection ->
+            val sql = "SELECT * FROM collectibles WHERE collectible_id IN (SELECT DISTINCT collectible_id FROM stock_portfolio WHERE user_id = ?);"
+            connection.prepareStatement(sql).use { statement ->
+                statement.setLong(1, userId)
+
+                val result = statement.executeQuery()
+                while (result.next()) {
+                    collectibles.add(extractCollectableFromResultSet(result))
+                }
+            }
+        }
+        return collectibles
+    }
+
+
+
+    private fun extractCollectableFromResultSet(resultSet: ResultSet): CollectablesEntity {
+        val id = resultSet.getLong("collectible_id")
+        val name = resultSet.getString("name")
+        val description = resultSet.getString("description")
+        val category = resultSet.getString("category")
+        val photo = "http://10.0.2.2:8080/image/" + resultSet.getString("photo_url")
+        val currentPrice = resultSet.getDouble("current_price")
+        val availableShares = resultSet.getInt("available_shares")
+        return CollectablesEntity(id, name, description, category, photo, currentPrice, availableShares)
+    }
+
+
+
 
     fun close() {
         dataSource.close()
