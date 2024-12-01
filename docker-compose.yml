@@ -33,6 +33,16 @@ services:
     networks:
       - backend
 
+  db-service:
+    image: collect_invest/db_service
+    depends_on:
+      - postgresql
+    restart: on-failure
+    volumes:
+      - ./src/main/resources/imageStorage:/liquibase/changelog:/app/src/main/resources/ImageStorage/
+    networks:
+      - backend
+
 volumes:
   postgresql_data:
 

@@ -11,7 +11,7 @@ import io.ktor.server.plugins.cors.routing.*
 
 fun main() {
 
-    System.setProperty("db.url", "jdbc:postgresql://localhost:5432/postgres")
+    System.setProperty("db.url", "jdbc:postgresql://postgresql:5432/postgres")
     System.setProperty("db.username", "postgres")
     System.setProperty("db.password", "password")
     System.setProperty("image.storage.url", "src/main/resources/ImageStorage/")

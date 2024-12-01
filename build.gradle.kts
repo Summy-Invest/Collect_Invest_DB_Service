@@ -38,5 +38,5 @@ kotlin {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("com.collect.invest.ApplicationKt")
 }
