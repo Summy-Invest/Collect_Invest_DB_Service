@@ -6,7 +6,7 @@ CREATE TABLE stock_portfolio(
     user_id INT,
     total_price NUMERIC(15, 2),
     transaction_id INT,
-    FOREIGN KEY (collectible_id) REFERENCES users(user_id),
+    FOREIGN KEY (collectible_id) REFERENCES collectibles(collectible_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (transaction_id) REFERENCES transactions(transaction_id)
 );
