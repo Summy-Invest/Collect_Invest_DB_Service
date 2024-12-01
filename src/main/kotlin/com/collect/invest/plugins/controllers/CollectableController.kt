@@ -102,4 +102,19 @@ fun Route.collectablesController(collectablesDao: CollectablesDao, stockPortfoli
 
     }
 
+
+    get("/getAllUserCollectibles/{id}"){
+        try {
+            val id = call.parameters["id"]?.toLongOrNull()
+            if (id != null) {
+                val collectables: List<CollectablesEntity> = stockPortfolioDao.getAllUserCollectibles(id)
+                call.respond(HttpStatusCode.OK, collectables)
+            }else{
+                call.respond(HttpStatusCode.BadRequest,"Error while getting collectable 2")
+            }
+        }catch (e: Throwable){
+            call.respond(HttpStatusCode.BadRequest,"Error while getting collectable 3")
+        }
+    }
+
 }

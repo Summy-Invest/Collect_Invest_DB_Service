@@ -105,7 +105,7 @@ class CollectablesDaoJdbc(
         val name = resultSet.getString("name")
         val description = resultSet.getString("description")
         val category = resultSet.getString("category")
-        val photo = "http://localhost:8080/image/" + resultSet.getString("photo_url")
+        val photo = "http://10.0.2.2:8080/image/" + resultSet.getString("photo_url")
         val currentPrice = resultSet.getDouble("current_price")
         val availableShares = resultSet.getInt("available_shares")
         return CollectablesEntity(id, name, description, category, photo, currentPrice, availableShares)
