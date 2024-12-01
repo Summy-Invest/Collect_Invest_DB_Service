@@ -38,8 +38,50 @@ services:
     depends_on:
       - postgresql
     restart: on-failure
+    ports:
+      - "8080:8080"
     volumes:
       - ./src/main/resources/imageStorage:/liquibase/changelog:/app/src/main/resources/ImageStorage/
+    networks:
+      - backend
+
+  financial-service:
+    image: collect_invest/financial_service
+    depends_on:
+      - db-service
+    restart: on-failure
+    ports:
+      - "7777:7777"
+    networks:
+      - backend
+
+  api-service:
+    image: collect_invest/api_service
+    depends_on:
+      - db-service
+    restart: on-failure
+    ports:
+      - "1111:1111"
+    networks:
+      - backend
+
+  collectible-service:
+    image: collect_invest/collectible_service
+    depends_on:
+      - db-service
+    restart: on-failure
+    ports:
+      - "3937:3937"
+    networks:
+      - backend
+
+  user-service:
+    image: collect_invest/user_service
+    depends_on:
+      - db-service
+    restart: on-failure
+    ports:
+      - "9999:9999"
     networks:
       - backend
 
